@@ -39,19 +39,44 @@ function read_as_heredoc(file,  line, retval) {
   close(file)
 }
 
+# Read a script verbatim and print its lines.
+# When the script has a shebang at the top, skip it.
+function read_as_script(file,  line, retval, first) {
+  first = 1
+  do {
+    retval = getline line < file
+    if (retval == 1) {
+      if (line ~ /^#!/ && first) continue
+      print line
+    }
+    if (retval < 0) {
+      throw_error("couldn't read line from file " quote(file))
+    }
+    first = 0
+  } while (retval > 0)
+  close(file)
+}
+
 BEGIN {
   #  print escape_line("hello $world, find `my \\voice")
   #  print quote("hello\nworld")
 }
 
-$1 == "#script" {
+$1 == "#data" {
   if (NF < 3) {
-    throw_error("invalid syntax for #script statement: " quote($0))
+    throw_error("invalid syntax for #data directive: " quote($0))
   }
   print $2 "=$(cat << EOF"
   read_as_heredoc($3)
   print "EOF"
   print ")"
+}
+
+$1 == "#include" {
+  if (NF < 2) {
+    throw_error("invalid syntax for #include directive: " quote($0))
+  }
+  read_as_script($2)
 }
 
 #($1 == "#ifdef") && ($2 in defined) {
