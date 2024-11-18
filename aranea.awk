@@ -14,10 +14,14 @@ function quote(line) {
   return "\"" line "\""
 }
 
-# Write an error message to stderr.
+# Write an error message to stderr and exit.
 # Simple utility.
-function log_error(message) {
+function throw_error(message) {
   print message > "/dev/stderr"
+  if (ERRNO) {
+    print "error: " ERRNO > "/dev/stderr"
+  }
+  exit 1
 }
 
 # Read a file and print its contents escaped for a 'here document' string.
@@ -28,23 +32,21 @@ function read_as_heredoc(file,  line, retval) {
     if (retval == 1) {
       print escape_line(line)
     }
-    if (retval == -1) {
-      log_error("couldn't read line from file " quote(file))
-      exit 1
+    if (retval < 0) {
+      throw_error("couldn't read line from file " quote(file))
     }
   } while (retval > 0)
   close(file)
 }
 
 BEGIN {
-  print escape_line("hello $world, find `my \\voice")
-  print quote("hello\nworld")
+  #  print escape_line("hello $world, find `my \\voice")
+  #  print quote("hello\nworld")
 }
 
 $1 == "#script" {
   if (NF < 3) {
-    log_error("invalid syntax for #script statement: " quote($0))
-    exit 1
+    throw_error("invalid syntax for #script statement: " quote($0))
   }
   print $2 "=$(cat << EOF"
   read_as_heredoc($3)
