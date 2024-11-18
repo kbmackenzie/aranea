@@ -70,6 +70,7 @@ $1 == "#data" {
   read_as_heredoc($3)
   print "EOF"
   print ")"
+  next
 }
 
 $1 == "#include" {
@@ -77,6 +78,7 @@ $1 == "#include" {
     throw_error("invalid syntax for #include directive: " quote($0))
   }
   read_as_script($2)
+  next
 }
 
 #($1 == "#ifdef") && ($2 in defined) {
