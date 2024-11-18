@@ -3,17 +3,51 @@
 # Escape line that will become part of a 'here document'.
 # The characters that should be escaped are: $ ` \
 function escape_line(line) {
-  # I have to do it in steps, because the regexp backreference approach...
-  #   gsub(/[`$\\]/, "\\&", doc)
-  # ... has unexpected behavior. ("\\&" has a special meaning in sub/gsub).
-  # https://www.gnu.org/software/gawk/manual/html_node/String-Functions.html#index-sub_0028_0029-function-1
-
-  gsub(/\\/, "\\\\", line)
-  gsub(/\$/, "\\$" , line)
-  gsub(/`/ , "\\`" , line)
+  gsub(/[$`\\]/, "\\\\&", line)
   return line
 }
 
-BEGIN {
-  print escape_line("hello $world, find my \\voice")
+function quote(line) {
+  gsub(/\n/, "\\n", line)
+  return "\"" line "\""
 }
+
+# Write an error message to stderr.
+# Simple utility.
+function log_error(message) {
+  print message > "/dev/stderr"
+}
+
+# Read a file and print its contents escaped for a 'here document' string.
+# This means the following characters are escaped: $ ` \
+function read_as_heredoc(file,  line, retval) {
+  do {
+    retval = getline line < file
+    if (retval == 1) {
+      print escape_line(line)
+    }
+    if (retval == -1) {
+      log_error("couldn't read line from file " quote(file))
+      exit 1
+    }
+  } while (retval > 0)
+  close(file)
+}
+
+BEGIN {
+  print escape_line("hello $world, find `my \\voice")
+}
+
+$1 == "#script" {
+  if (NF < 3) {
+    log_error("invalid syntax for #script statement: " quote($0))
+    exit 1
+  }
+  print $2 "=$(cat << EOF"
+  read_as_heredoc($3)
+  print "EOF"
+  print ")"
+}
+
+#($1 == "#ifdef") && ($2 in defined) {
+#}
