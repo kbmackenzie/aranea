@@ -7,6 +7,8 @@ function escape_line(line) {
   return line
 }
 
+# Quote + escape a string for displaying.
+# Surrounds it with double quotes.
 function quote(line) {
   gsub(/\n/, "\\n", line)
   return "\"" line "\""
@@ -36,6 +38,7 @@ function read_as_heredoc(file,  line, retval) {
 
 BEGIN {
   print escape_line("hello $world, find `my \\voice")
+  print quote("hello\nworld")
 }
 
 $1 == "#script" {
