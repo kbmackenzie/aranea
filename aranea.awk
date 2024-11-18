@@ -46,7 +46,7 @@ function read_as_script(file,  line, retval, first) {
   do {
     retval = getline line < file
     if (retval == 1) {
-      if (line ~ /^#!/ && first) continue
+      if (first && line ~ /^#!/) continue
       print line
     }
     if (retval < 0) {
