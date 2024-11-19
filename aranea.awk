@@ -1,5 +1,16 @@
 #!/bin/awk -f
 
+BEGIN {
+  # Match fields. Fields can be keywords (e.g. #include) or strings (e.g. "hello.awk").
+  # Note: FPAT is specific to GNU Awk!
+  FPAT="([[:alnum:][:punct:]]+)|(\".*\")"
+}
+
+{
+  print "\"" $1 "\""
+  print "\"" $2 "\""
+}
+
 # Escape line that will become part of a 'here document'.
 # The characters that should be escaped are: $ ` \
 function escape_line(line) {
@@ -55,11 +66,6 @@ function read_as_script(file,  line, retval, first) {
     first = 0
   } while (retval > 0)
   close(file)
-}
-
-BEGIN {
-  #  print escape_line("hello $world, find `my \\voice")
-  #  print quote("hello\nworld")
 }
 
 $1 == "#data" {
