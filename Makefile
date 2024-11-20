@@ -1,10 +1,17 @@
-NAME   := aranea
-SCRIPT := ./aranea.awk
+PREFIX ?= $(HOME)/.local/bin
+SCRIPT := aranea.awk
 
 lint:
-	$(SCRIPT) --lint <<< ""
+	./$(SCRIPT) --lint <<< ""
 
 test:
-	$(SCRIPT) $(wildcard test/*)
+	./$(SCRIPT) $(wildcard test/*)
 
-.PHONY: lint test
+install:
+	mkdir -p $(PREFIX)
+	cp ./$(SCRIPT) $(PREFIX)
+
+uninstall:
+	rm $(PREFIX)/$(SCRIPT)
+
+.PHONY: lint test install uninstall
