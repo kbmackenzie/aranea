@@ -72,8 +72,10 @@ function enqueue_file(file) {
 
 # Remove a special file from the queue.
 function dequeue_file() {
-  if (queue_size > 0)
+  if (queue_size > 0) {
+    close(file_queue[queue_size - 1])
     delete file_queue[--queue_size]
+  }
 }
 
 # Write an error message to stderr and exit.
