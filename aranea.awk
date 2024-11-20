@@ -4,11 +4,49 @@ BEGIN {
   # Match fields. Fields can be keywords (e.g. #include) or strings (e.g. "hello.awk").
   # Note: FPAT is specific to GNU Awk!
   FPAT="([[:alnum:][:punct:]]+)|(\".*\")"
+
+  # File queue, where @data and @include file names will be stored.
+  # When queue is empty, read from normal program flow input. 
+  # file_queue[]
+  queue_size = 0
 }
 
-{
-  print "\"" $1 "\""
-  print "\"" $2 "\""
+# Add a special file to the queue.
+function enqueue_file(file) {
+  file_queue[queue_size++] = file
+}
+
+# Remove a special file from the queue.
+function dequeue_file() {
+  if (queue_size > 0)
+    delete file_queue[queue_size--]
+}
+
+# Write an error message to stderr and exit.
+# Simple utility.
+function throw_error(message) {
+  print message ": " ERRNO > "/dev/stderr"
+  exit 1
+}
+
+# Read a line.
+# - When a special file is enqueued, read from it.
+# - When no file is enqueued, read next line from normal input.
+function read_line(   line, retval) {
+  if (queue_size <= 0) {
+    retval = getline line
+  }
+  else {
+    retval = getline line < file_queue[queue_size]
+  }
+  if (retval == 0) {
+    dequeue_file()
+    return read_line()
+  }
+  if (retval == 1) {
+    return line
+  }
+  throw_error("couldn't read line")
 }
 
 # Escape line that will become part of a 'here document'.
@@ -24,68 +62,3 @@ function quote(line) {
   gsub(/\n/, "\\n", line)
   return "\"" line "\""
 }
-
-# Write an error message to stderr and exit.
-# Simple utility.
-function throw_error(message) {
-  print message > "/dev/stderr"
-  if (ERRNO) {
-    print "error: " ERRNO > "/dev/stderr"
-  }
-  exit 1
-}
-
-# Read a file and print its contents escaped for a 'here document' string.
-# This means the following characters are escaped: $ ` \
-function read_as_heredoc(file,  line, retval) {
-  do {
-    retval = getline line < file
-    if (retval == 1) {
-      print escape_line(line)
-    }
-    if (retval < 0) {
-      throw_error("couldn't read line from file " quote(file))
-    }
-  } while (retval > 0)
-  close(file)
-}
-
-# Read a script verbatim and print its lines.
-# When the script has a shebang at the top, skip it.
-function read_as_script(file,  line, retval, first) {
-  first = 1
-  do {
-    retval = getline line < file
-    if (retval == 1) {
-      if (first && line ~ /^#!/) continue
-      print line
-    }
-    if (retval < 0) {
-      throw_error("couldn't read line from file " quote(file))
-    }
-    first = 0
-  } while (retval > 0)
-  close(file)
-}
-
-$1 == "#data" {
-  if (NF < 3) {
-    throw_error("invalid syntax for #data directive: " quote($0))
-  }
-  print $2 "=$(cat << EOF"
-  read_as_heredoc($3)
-  print "EOF"
-  print ")"
-  next
-}
-
-$1 == "#include" {
-  if (NF < 2) {
-    throw_error("invalid syntax for #include directive: " quote($0))
-  }
-  read_as_script($2)
-  next
-}
-
-#($1 == "#ifdef") && ($2 in defined) {
-#}
