@@ -171,7 +171,7 @@ function read_as_data_variable(variable, file,  line, retval, delimeter) {
 
 # Should the current line be skipped?
 function should_skip() {
-  return (cond_level > 0) && conditionals[cond_level]
+  return (cond_level > 0) && !conditionals[cond_level - 1]
 }
 
 # Push the result of a condition into the stack.
