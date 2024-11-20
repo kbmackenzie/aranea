@@ -1,14 +1,37 @@
 #!/bin/awk -f
 
 BEGIN {
-  # Match fields. Fields can be keywords (e.g. #include) or strings (e.g. "hello.awk").
-  # Note: FPAT is specific to GNU Awk!
-  FPAT="([[:alnum:][:punct:]]+)|(\".*\")"
+  # When using GAWK, parse fields in a more sensible way (support quoted strings).
+  # This has no effect on other flavors of Awk.
+  FPAT = "([[:alnum:][:punct:]]+)|(\".*\")"
 
-  # File queue, where @data and @include file names will be stored.
-  # When queue is empty, read from normal program flow input. 
-  # file_queue[]
   queue_size = 0
+  while (read_line() != 0) {
+    if /^#include/ {
+      if (NF < 2) { syntax_error("#include", $0) }
+      enqueue_file($2)
+      continue
+    }
+
+    if /^#data/ {
+      if (NF < 3) { syntax_error("#data", $0) }
+      continue
+    }
+
+    if /^#define/ {
+      if (NF < 3) { syntax_error("#define", $0) }
+      define_map[$1] = $2
+      continue
+    }
+
+    if /^#ifdef/ {
+      continue
+    }
+
+    if /^#else/ {
+      continue
+    }
+  }
 }
 
 # Add a special file to the queue.
@@ -29,22 +52,31 @@ function throw_error(message) {
   exit 1
 }
 
+function syntax_error(directive, line) {
+  throw_error("invalid syntax for " directive " directive: " quote(line))
+}
+
 # Read a line.
 # - When a special file is enqueued, read from it.
 # - When no file is enqueued, read next line from normal input.
-function read_line(   line, retval) {
-  if (queue_size <= 0) {
+#
+# The return value of this function has special meaning:
+# - 0: End of input has been reached.
+# - 1: A line has been successfully read.
+function read_line(   retval) {
+  if (queue_size == 0) {
     retval = getline line
   }
   else {
     retval = getline line < file_queue[queue_size]
   }
   if (retval == 0) {
+    if (queue_size == 0) return 0
     dequeue_file()
     return read_line()
   }
   if (retval == 1) {
-    return line
+    return 1
   }
   throw_error("couldn't read line")
 }
