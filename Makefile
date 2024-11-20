@@ -2,7 +2,7 @@ NAME   := aranea
 SCRIPT := ./aranea.awk
 
 lint:
-	$(SCRIPT) --lint=no-ext <<< ""
+	$(SCRIPT) --lint <<< ""
 
 test:
 	$(SCRIPT) $(wildcard test/*)

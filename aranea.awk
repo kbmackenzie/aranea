@@ -6,7 +6,13 @@ BEGIN {
   FPAT = "([[:alnum:][:punct:]]+)|(\".*\")"
 
   queue_size = 0
+  cond_level = 0
+
   while (read_line() != 0) {
+    # A lot of 'continue's in this. I wish vanilla Awk had higher-order functions. >:|
+    # I prefer using 'continue' to express state changes, as I have no better option.
+    if (should_skip()) continue
+
     if (/^#include/) {
       if (NF < 2) { syntax_error("#include", $0) }
       enqueue_file($2)
@@ -21,17 +27,40 @@ BEGIN {
 
     if (/^#define/) {
       if (NF < 3) { syntax_error("#define", $0) }
-      define_map[$1] = $2
+      define_map[$2] = 1
+      continue
+    }
+
+    if (/^#undef/) {
+      if (NF < 2) { syntax_error("#undef", $0) }
+      delete define_map[$2]
       continue
     }
 
     if (/^#ifdef/) {
+      if (NF < 2) { syntax_error("#ifdef", $0) }
+      push_conditional($2 in define_map)
+      continue
+    }
+
+    if (/^#ifndef/) {
+      if (NF < 2) { syntax_error("#ifndef", $0) }
+      push_conditional(!($2 in define_map))
       continue
     }
 
     if (/^#else/) {
+      flip_conditional()
       continue
     }
+
+    if (/#^endif/) {
+      pop_conditional()
+      continue
+    }
+
+    # When not matching any of the above, just print.
+    print $0
   }
 }
 
@@ -43,16 +72,19 @@ function enqueue_file(file) {
 # Remove a special file from the queue.
 function dequeue_file() {
   if (queue_size > 0)
-    delete file_queue[queue_size--]
+    delete file_queue[--queue_size]
 }
 
 # Write an error message to stderr and exit.
 # Simple utility.
-function throw_error(message) {
-  print message " | error: " ERRNO > "/dev/stderr"
+function throw_error(message, no_context,  context) {
+  context = (no_context) ? "" : ("| error: " ERRNO)
+  print message, context > "/dev/stderr"
   exit 1
 }
 
+# Write a syntax error concerning a specific directive.
+# Simple utility.
 function syntax_error(directive, line) {
   throw_error("invalid syntax for " directive " directive: " quote(line))
 }
@@ -69,7 +101,7 @@ function read_line(   retval) {
     retval = getline
   }
   else {
-    retval = getline < file_queue[queue_size]
+    retval = getline < file_queue[queue_size - 1]
   }
   if (retval == 0) {
     if (queue_size == 0) return 0
@@ -96,10 +128,10 @@ function get_delimeter(filepath,  key) {
   return key
 }
 
-# Quote + escape a string for displaying.
-# Surrounds it with double quotes.
+# Quote (+ escape) a string for displaying. Surrounds it with double quotes.
+# This function expects only a single line (no newline characters)!
 function quote(line) {
-  gsub(/\n/, "\\n", line)
+  gsub(/"/, "\\\"", line)
   return "\"" line "\""
 }
 
@@ -124,4 +156,43 @@ function read_as_data_variable(variable, file,  line, retval, delimeter) {
   }
   print delimeter
   print ")"
+}
+
+# Conditional jumps (#ifdef, #ifndef, #else) are represented by a boolean stack.
+#
+# It follows two simple rules:
+# - When the top of the stack is 1 (true), skip the current line.
+# - When the top of the stack is 0 (false), don't skip the current line.
+#
+# In addition....
+# - When #else is found, flip the boolean value at the top of the stack.
+# - When #endif is found, pop the stack.
+
+# Should the current line be skipped?
+function should_skip() {
+  return (cond_level > 0) && conditionals[cond_level]
+}
+
+# Push the result of a condition into the stack.
+# This begins a new conditional block.
+function push_conditional(result) {
+  conditionals[cond_level++] = (result) ? 1 : 0
+}
+
+# Pop the conditional stack.
+# This closes an existing conditional block.
+function pop_conditional() {
+  if (cond_level <= 0) {
+    throw_error("cannot close unopened conditional", 1)
+  }
+  delete conditionals[--cond_level]
+}
+
+# Flip the value at the top of the conditional stack.
+# This is done for #else blocks.
+function flip_conditional() {
+  if (cond_level <= 0) {
+    throw_error("cannot flip unopened conditional", 1)
+  }
+  conditionals[cond_level - 1] = !conditionals[cond_level - 1]
 }
