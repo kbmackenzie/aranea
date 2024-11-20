@@ -127,7 +127,7 @@ function escape_line(line) {
 # Get a valid delimeter based on a filename to use in a 'here document'.
 # This is done so that nested here documents are simpler to implement.
 function get_delimeter(filepath,  key) {
-  gsub(/[^[a-zA-Z_]]/, "_", key)
+  gsub(/[^a-zA-Z_]/, "_", key)
   return key
 }
 
