@@ -21,7 +21,7 @@ BEGIN {
 
     if (keep && /^#data/) {
       if (NF < 3) { syntax_error("#data", $0) }
-      read_as_data_variable($1, $2)
+      read_as_data_variable($2, $3)
       continue
     }
 
