@@ -80,7 +80,7 @@ function dequeue_file() {
 # Simple utility.
 function throw_error(message, no_context,  context) {
   context = (no_context) ? "" : ("| error: " ERRNO)
-  print message, context > "/dev/stderr"
+  print "line " NR ":", message, context > "/dev/stderr"
   exit 1
 }
 
