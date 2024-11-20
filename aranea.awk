@@ -7,29 +7,29 @@ BEGIN {
 
   queue_size = 0
   while (read_line() != 0) {
-    if /^#include/ {
+    if (/^#include/) {
       if (NF < 2) { syntax_error("#include", $0) }
       enqueue_file($2)
       continue
     }
 
-    if /^#data/ {
+    if (/^#data/) {
       if (NF < 3) { syntax_error("#data", $0) }
       read_as_data_variable($1, $2)
       continue
     }
 
-    if /^#define/ {
+    if (/^#define/) {
       if (NF < 3) { syntax_error("#define", $0) }
       define_map[$1] = $2
       continue
     }
 
-    if /^#ifdef/ {
+    if (/^#ifdef/) {
       continue
     }
 
-    if /^#else/ {
+    if (/^#else/) {
       continue
     }
   }
