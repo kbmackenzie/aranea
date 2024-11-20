@@ -162,8 +162,8 @@ function read_as_data_variable(variable, file,  line, retval, delimeter) {
 # Conditional jumps (#ifdef, #ifndef, #else) are represented by a boolean stack.
 #
 # It follows two simple rules:
-# - When the top of the stack is 1 (true), skip the current line.
-# - When the top of the stack is 0 (false), don't skip the current line.
+# - When the top of the stack is 1 (true), keep the current line.
+# - When the top of the stack is 0 (false), skip the current line.
 #
 # In addition....
 # - When #else is found, flip the boolean value at the top of the stack.
