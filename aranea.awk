@@ -11,39 +11,39 @@ BEGIN {
   while (read_line() != 0) {
     # A lot of 'continue's in this. I wish vanilla Awk had higher-order functions. >:|
     # I prefer using 'continue' to express state changes, as I have no better option.
-    if (should_skip()) continue
+    keep = !should_skip()
 
-    if (/^#include/) {
+    if (keep && /^#include/) {
       if (NF < 2) { syntax_error("#include", $0) }
       enqueue_file($2)
       continue
     }
 
-    if (/^#data/) {
+    if (keep && /^#data/) {
       if (NF < 3) { syntax_error("#data", $0) }
       read_as_data_variable($1, $2)
       continue
     }
 
-    if (/^#define/) {
+    if (keep && /^#define/) {
       if (NF < 2) { syntax_error("#define", $0) }
       define_map[$2] = 1
       continue
     }
 
-    if (/^#undef/) {
+    if (keep && /^#undef/) {
       if (NF < 2) { syntax_error("#undef", $0) }
       delete define_map[$2]
       continue
     }
 
-    if (/^#ifdef/) {
+    if (keep && /^#ifdef/) {
       if (NF < 2) { syntax_error("#ifdef", $0) }
       push_conditional($2 in define_map)
       continue
     }
 
-    if (/^#ifndef/) {
+    if (keep && /^#ifndef/) {
       if (NF < 2) { syntax_error("#ifndef", $0) }
       push_conditional(!($2 in define_map))
       continue
@@ -60,7 +60,7 @@ BEGIN {
     }
 
     # When not matching any of the above, just print.
-    print $0
+    if (keep) { print $0 }
   }
   check_conditionals()
 }
