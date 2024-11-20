@@ -54,7 +54,7 @@ BEGIN {
       continue
     }
 
-    if (/#^endif/) {
+    if (/^#endif/) {
       pop_conditional()
       continue
     }
