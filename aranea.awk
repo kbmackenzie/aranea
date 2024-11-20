@@ -26,7 +26,7 @@ BEGIN {
     }
 
     if (/^#define/) {
-      if (NF < 3) { syntax_error("#define", $0) }
+      if (NF < 2) { syntax_error("#define", $0) }
       define_map[$2] = 1
       continue
     }
@@ -62,6 +62,7 @@ BEGIN {
     # When not matching any of the above, just print.
     print $0
   }
+  check_conditionals()
 }
 
 # Add a special file to the queue.
@@ -86,7 +87,7 @@ function throw_error(message, no_context,  context) {
 # Write a syntax error concerning a specific directive.
 # Simple utility.
 function syntax_error(directive, line) {
-  throw_error("invalid syntax for " directive " directive: " quote(line))
+  throw_error("syntax error: invalid form of " directive " directive: " quote(line), 1)
 }
 
 # Read a line.
@@ -195,4 +196,13 @@ function flip_conditional() {
     throw_error("cannot flip unopened conditional", 1)
   }
   conditionals[cond_level - 1] = !conditionals[cond_level - 1]
+}
+
+# Check the conditional stack at the end; see if they're all closed.
+# If they're not, handle it appropriately.
+function check_conditionals(  noun) {
+  if (cond_level > 0) {
+    noun = (cond_level == 1) ? "directive" : "directives"
+    throw_error("syntax error: " cond_level " unclosed conditional " noun "!", 1)
+  }
 }
