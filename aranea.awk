@@ -15,6 +15,7 @@ BEGIN {
 
     if /^#data/ {
       if (NF < 3) { syntax_error("#data", $0) }
+      read_as_data_variable($1, $2)
       continue
     }
 
@@ -48,7 +49,7 @@ function dequeue_file() {
 # Write an error message to stderr and exit.
 # Simple utility.
 function throw_error(message) {
-  print message ": " ERRNO > "/dev/stderr"
+  print message " | error: " ERRNO > "/dev/stderr"
   exit 1
 }
 
@@ -65,10 +66,10 @@ function syntax_error(directive, line) {
 # - 1: A line has been successfully read.
 function read_line(   retval) {
   if (queue_size == 0) {
-    retval = getline line
+    retval = getline
   }
   else {
-    retval = getline line < file_queue[queue_size]
+    retval = getline < file_queue[queue_size]
   }
   if (retval == 0) {
     if (queue_size == 0) return 0
@@ -88,9 +89,39 @@ function escape_line(line) {
   return line
 }
 
+# Get a valid delimeter based on a filename to use in a 'here document'.
+# This is done so that nested here documents are simpler to implement.
+function get_delimeter(filepath,  key) {
+  gsub(/[^[a-zA-Z_]]/, "_", key)
+  return key
+}
+
 # Quote + escape a string for displaying.
 # Surrounds it with double quotes.
 function quote(line) {
   gsub(/\n/, "\\n", line)
   return "\"" line "\""
+}
+
+# Read data from file into cat as a 'here document'.
+# Assign it to a shell variable.
+function read_as_data_variable(variable, file,  line, retval, delimeter) {
+  # Get delimeter based on a filename.
+  # This allows nested heredocs! :)
+  delimeter = get_delimeter(file)
+
+  print variable "=$(cat << " delimeter
+  while (1) {
+    retval = getline line < file
+    if (retval == 1) {
+      print escape_line(line)
+      continue
+    }
+    if (retval < 0) {
+      throw_error("couldn't read file " quote(file))
+    }
+    break
+  }
+  print delimeter
+  print ")"
 }
