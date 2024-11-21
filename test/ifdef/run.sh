@@ -25,3 +25,14 @@ echo Foo *and* bar are still defined!
 echo Bar is not defined.
 #endif
 #endif
+
+#ifndef foo
+echo Foo is not defined.
+#else
+echo Foo is defined.
+#ifdef bar
+echo Foo *and* bar are defined.
+#else
+echo Foo is defined, but bar is not.
+#endif
+#endif
