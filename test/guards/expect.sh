@@ -1,6 +1,6 @@
 echo Including scripts...
 
-foo {
+foo () {
   echo Calling a function defined in foo.sh!
 }
 
