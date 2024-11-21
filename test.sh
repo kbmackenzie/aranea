@@ -22,9 +22,11 @@ for TEST in $TEST_LIST; do
 
   if [ $? -ne 0 ]; then
     FAIL_COUNT=$((FAIL_COUNT + 1))
-    echo_error "Test \"${TEST}\" failed!"
-    exit 1
+    TEST_RESULT='❌'
+  else
+    TEST_RESULT='✅'
   fi
+  echo "  ${TEST}: [${TEST_RESULT}]"
 done
 
 if [ $FAIL_COUNT -gt 0 ]; then
