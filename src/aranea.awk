@@ -99,7 +99,7 @@ function syntax_error(directive, line) {
 # The return value of this function has special meaning:
 # - 0: End of input has been reached.
 # - 1: A line has been successfully read.
-function read_line(   retval) {
+function read_line(   retval, source) {
   if (queue_size == 0) {
     retval = getline
   }
@@ -114,7 +114,9 @@ function read_line(   retval) {
   if (retval == 1) {
     return 1
   }
-  throw_error("couldn't read line")
+  
+  source = (queue_size <= 0) ? "input" : quote(file_queue[queue_size - 1])
+  throw_error("couldn't read line from " source)
 }
 
 # Escape line that will become part of a 'here document'.
