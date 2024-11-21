@@ -89,7 +89,7 @@ function throw_error(message, no_context,  context) {
 # Write a syntax error concerning a specific directive.
 # Simple utility.
 function syntax_error(directive, line) {
-  throw_error("syntax error: invalid form of " directive " directive: " quote(line), 1)
+  throw_error("syntax error: incorrect argument count for " directive " directive: " quote(line), 1)
 }
 
 # Read a line.
