@@ -15,7 +15,10 @@ echo "Running tests..."
 
 for TEST in $TEST_LIST; do
   TEST_PATH="./test/${TEST}"
-  $SCRIPT "${TEST_PATH}/main.sh" | diff - "${TEST_PATH}/expect.sh"
+
+  # Compare program output with expected output through 'diff'.
+  # When the two differ, this means a test failed.
+  $SCRIPT "${TEST_PATH}/run.sh" | diff - "${TEST_PATH}/expect.sh"
 
   if [ $? -ne 0 ]; then
     FAIL_COUNT=$((FAIL_COUNT + 1))
