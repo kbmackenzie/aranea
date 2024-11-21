@@ -18,7 +18,7 @@ for TEST in $TEST_LIST; do
 
   # Compare program output with expected output through 'diff'.
   # When the two differ, this means a test failed.
-  $SCRIPT "${TEST_PATH}/run.sh" | diff - "${TEST_PATH}/expect.sh"
+  $SCRIPT "${TEST_PATH}/run.sh" | diff --color - "${TEST_PATH}/expect.sh"
 
   if [ $? -ne 0 ]; then
     FAIL_COUNT=$((FAIL_COUNT + 1))
