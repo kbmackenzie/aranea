@@ -3,7 +3,7 @@ Aranea has one extra feature when used with [GNU Awk][1]. More extra features ma
 ## Table of Contents
 
 1. [Extra Features](#extra-features)
-  1. [Quoted Strings](#quoted-strings)
+    1. [Quoted Strings](#quoted-strings)
 2. [Installing GNU Awk](#installing-gnu-awk)
 
 ## Extra Features
