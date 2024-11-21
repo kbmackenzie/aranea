@@ -26,7 +26,7 @@ make install
 If you wish to install it somewhere else (e.g. `/usr/local/bin`), simply define `PREFIX`:
 
 ```bash
-make -D PREFIX=/usr/bin install
+make PREFIX=/usr/bin install
 ```
 
 **Note:** Aranea has extra features when used with [GNU Awk][1], as explained [here](./docs/gawk.md).
