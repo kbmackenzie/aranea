@@ -14,37 +14,37 @@ BEGIN {
     keep = !should_skip()
 
     if (keep && /^#include/) {
-      if (NF < 2) { syntax_error("#include", $0) }
+      if (NF != 2) { syntax_error("#include", $0) }
       enqueue_file($2)
       continue
     }
 
     if (keep && /^#data/) {
-      if (NF < 3) { syntax_error("#data", $0) }
+      if (NF != 3) { syntax_error("#data", $0) }
       read_as_data_variable($2, $3)
       continue
     }
 
     if (keep && /^#define/) {
-      if (NF < 2) { syntax_error("#define", $0) }
+      if (NF != 2) { syntax_error("#define", $0) }
       define_map[$2] = 1
       continue
     }
 
     if (keep && /^#undef/) {
-      if (NF < 2) { syntax_error("#undef", $0) }
+      if (NF != 2) { syntax_error("#undef", $0) }
       delete define_map[$2]
       continue
     }
 
     if (keep && /^#ifdef/) {
-      if (NF < 2) { syntax_error("#ifdef", $0) }
+      if (NF != 2) { syntax_error("#ifdef", $0) }
       push_conditional($2 in define_map)
       continue
     }
 
     if (keep && /^#ifndef/) {
-      if (NF < 2) { syntax_error("#ifndef", $0) }
+      if (NF != 2) { syntax_error("#ifndef", $0) }
       push_conditional(!($2 in define_map))
       continue
     }
