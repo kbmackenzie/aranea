@@ -9,8 +9,8 @@ BEGIN {
   cond_level = 0
 
   while (read_line() != 0) {
-    # A lot of 'continue's in this. I wish vanilla Awk had higher-order functions. >:|
-    # I prefer using 'continue' to express state changes, as I have no better option.
+    # A little bit of a soup of 'continue', but I have no better options.
+    # I wish vanilla Awk supported higher-order functions.
     keep = !should_skip()
 
     if (keep && /^#include/) {
