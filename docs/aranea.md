@@ -12,7 +12,7 @@ You're encouraged to read the sections below **in order**.
 2. [File Search](#file-search)
 3. [Preprocessor Directives](#preprocessor-directives)
 4. [A Note About Whitespace](#a-note-about-whitespace)
-5. [Known Caveats][5]
+5. [Known Caveats](#known-caveats)
 
 ## Using Aranea
 
