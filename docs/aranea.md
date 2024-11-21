@@ -191,9 +191,11 @@ With GNU Awk, **Aranea supports quoted strings**:
 
 Because of this, you're heavily encouraged to use GNU Awk for best results.
 
-A lot of Linux distributions already symlink `/usr/bin/awk` to `/usr/bin/gawk`, so this won't be a problem for many people. Unfortunately, not all of them do.
+A lot of Linux distributions already come with GNU Awk. In those distributions, `/usr/bin/awk` is typically a symlink to `/usr/bin/gawk`.
 
-**Notably**, Debian-based distros (like Ubuntu) ship with `mawk` instead. There, you will need to install `gawk` yourself (with `sudo apt-get install gawk`), and manually edit the script's shebang line to use `gawk`.
+**Unfortunately**, Debian-based distros (like Ubuntu) ship with `mawk` instead. There, you will need to install `gawk` yourself (`sudo apt-get install gawk`) and manually edit `aranea` shebang line to use `gawk`.
+
+[See this section](gawk.md#installing-gnu-awk) for guidance on checking what flavor of Awk you have.
 
 ## Known Caveats
 
