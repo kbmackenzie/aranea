@@ -1,4 +1,4 @@
-Aranea is a **tiny, minimalistic** shell preprocessor written in POSIX-compliant **Awk**. It's a tiny, portable, self-contained script!
+Aranea is a **tiny, minimalist** shell preprocessor written in POSIX-compliant **Awk**. It's a tiny, portable, self-contained script!
 
 It's inspired by the C preprocessor, and its output can be used with any [POSIX-compliant shell][3]. It should work out-of-the-box in most Linux distributions. It can...
 
