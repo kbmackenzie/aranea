@@ -1,0 +1,6 @@
+echo Including scripts...
+#include test/guard/foo.sh
+#include test/guard/bar.sh
+
+echo Calling bar...
+bar
