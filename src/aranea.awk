@@ -145,7 +145,7 @@ function read_as_data_variable(variable, file,  line, retval, delimeter) {
   # This allows nested heredocs! :)
   delimeter = get_delimeter(file)
 
-  print variable "=$(cat << " delimeter
+  print variable "=$(cat << '" delimeter "'"
   while (1) {
     retval = getline line < file
     if (retval == 1) {
