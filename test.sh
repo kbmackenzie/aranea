@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # A simple file-oriented test suite for Aranea.
-SCRIPT='./aranea.awk'
+SCRIPT='./src/aranea.awk'
 
 log_error() {
   echo "$1" 1>&2

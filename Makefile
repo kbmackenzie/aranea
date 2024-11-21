@@ -1,5 +1,5 @@
 PREFIX ?= $(HOME)/.local/bin
-SCRIPT := aranea.awk
+SCRIPT := src/aranea.awk
 
 lint:
 	awk --lint -f $(SCRIPT) <<< ""
