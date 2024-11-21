@@ -36,7 +36,7 @@ To know what flavor of Awk you have, run this command:
 realpath /usr/bin/awk
 ```
 
-If your distribution comes with another flavor of Awk, you'll need to manually install `gawk`. Additionally, you will need to edit the shebang line on the `aranea` script to use `gawk` instead.
+If your distribution comes with another flavor of Awk, you'll need to manually install `gawk`. Additionally, you will need to edit the shebang line in the `aranea` script to use `gawk` instead.
 
 **Unfortunately**, a lot of Debian-based distros (like Ubuntu) ship with `mawk` as their default Awk flavor. You can run `sudo apt-get install gawk` to install `gawk` on such distros.
 
