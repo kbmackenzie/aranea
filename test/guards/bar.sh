@@ -1,7 +1,7 @@
 #ifndef BAR_SH
 #define BAR_SH
 
-#include test/guard/foo.sh
+#include test/guards/foo.sh
 
 bar() {
   foo
