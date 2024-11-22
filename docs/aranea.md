@@ -1,6 +1,6 @@
 ## Introduction
 
-Aranea is a **tiny, minimalist** shell preprocessor written in POSIX-compliant **Awk**. It's a tiny, portable, self-contained script!
+Aranea is a **tiny, minimalist** shell preprocessor written in POSIX-compliant **Awk**. It's a small, portable, self-contained script!
 
 It's inspired by the C preprocessor, and its output can be used with any [POSIX-compliant shell][3].
 
@@ -30,7 +30,7 @@ To capture its output into a file, you should use **redirections**, as you would
 aranea myscript.sh > output.sh
 ```
 
-Alternatively, if you wish to be specially meta, you can pipe Aranea's output into a POSIX-compliant shell like `bash` to execute it directly:
+Alternatively, you can pipe Aranea's output into a POSIX-compliant shell like `bash` to execute it directly:
 
 ```bash
 aranea myscript.sh | bash
@@ -40,7 +40,7 @@ aranea myscript.sh | bash
 
 Aranea always looks for files in the **current working directory**. Whenever a directive expects a filepath, know the path should be relative to the current working directory.
 
-As an example, with this directory structure (where `.` is the current working directory):
+As an example, with this directory structure (where `.` is the current working directory)...
 
 ```tree
 .
@@ -50,7 +50,7 @@ As an example, with this directory structure (where `.` is the current working d
 └── foobar.sh
 ```
 
-If we wish to include `foo.sh` and `bar.sh` inside `foobar.sh`, we must do:
+... if we wish to include `foo.sh` and `bar.sh` inside `foobar.sh`, we must do:
 
 ```c
 #include lib/foo.sh
@@ -86,7 +86,7 @@ To prevent a script from being included twice, you can use [include guards][2], 
 #include "this path can have spaces.sh"
 ```
 
-[See this section](#a-note-about-whitespace) to know why this feature isn't available in vanilla Awk.
+[See this section](#a-note-about-whitespace) to know why this feature isn't available when using POSIX Awk.
 
 ### `#data`
 
@@ -110,7 +110,7 @@ echo "$EXAMPLE"
 #data EXAMPLE "data/example with spaces.txt"
 ```
 
-[See this section](#a-note-about-whitespace) to know why this feature isn't available in vanilla Awk.
+[See this section](#a-note-about-whitespace) to know why this feature isn't available when using POSIX Awk.
 
 ### `#define`
 
@@ -150,7 +150,7 @@ As shown in the example above, a conditional block opened by `#ifdef` must **alw
 #endif
 ```
 
-Nesting is also supported: conditional blocks can be nested within each other *ad infinitum*.
+Nesting is also supported: conditional blocks can be nested within other conditional blocks.
 
 ### `#ifndef`
 
@@ -181,7 +181,7 @@ It shouldn't be a problem for **most** projects (*who uses spaces in their scrip
 
 ### Solution: GNU Awk
 
-Whitespace is thankfully **not a problem with [GNU Awk][1]**, thanks to the `FPAT` extension, which lets Aranea use a regular expression for matching fields.
+Whitespace is thankfully **not a problem with [GNU Awk][1]**, thanks to the `FPAT` extension, which lets Aranea use a regular expression for parsing fields.
 
 With GNU Awk, **Aranea supports quoted strings**:
 
