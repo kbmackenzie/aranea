@@ -18,7 +18,7 @@ When parsing lines, Aranea splits fields by **whitespace**. This is the default 
 
 It shouldn't be a problem for **most** projects (*who uses spaces in their script names?!*), but it can be a surprise for some people.
 
-Whitespace is thankfully **not a problem with [GNU Awk][1]**, thanks to the `FPAT` extension, which lets Aranea use a regular expression for matching fields.
+Whitespace is fortunately **not a problem with [GNU Awk][1]**, thanks to the `FPAT` extension, which lets Aranea use a regular expression for matching fields.
 
 With GNU Awk, **Aranea supports quoted strings**:
 
