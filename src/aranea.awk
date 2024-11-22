@@ -5,7 +5,7 @@ BEGIN {
   # This has no effect on other flavors of Awk.
   FPAT = "([[:alnum:][:punct:]]+)|(\".*\")"
 
-  queue_size = 0
+  file_count = 0
   cond_level = 0
 
   while (read_line() != 0) {
@@ -15,7 +15,7 @@ BEGIN {
 
     if (keep && /^#include/) {
       if (NF != 2) { syntax_error("#include", $0) }
-      enqueue_file($2)
+      push_file($2)
       continue
     }
 
@@ -65,16 +65,16 @@ BEGIN {
   check_conditionals()
 }
 
-# Add a special file to the queue.
-function enqueue_file(file) {
-  file_queue[queue_size++] = file
+# Push a file onto the file stack.
+function push_file(file) {
+  file_stack[file_count++] = file
 }
 
-# Remove a special file from the queue.
-function dequeue_file() {
-  if (queue_size > 0) {
-    close(file_queue[queue_size - 1])
-    delete file_queue[--queue_size]
+# Pop the file stack.
+function pop_file() {
+  if (file_count > 0) {
+    close(file_stack[file_count - 1])
+    delete file_stack[--file_count]
   }
 }
 
@@ -93,29 +93,29 @@ function syntax_error(directive, line) {
 }
 
 # Read a line.
-# - When a special file is enqueued, read from it.
-# - When no file is enqueued, read next line from normal input.
+# - When a file is at the top of the file stack, read from it.
+# - When the file stack is empty, read next line from normal input.
 #
 # The return value of this function has special meaning:
 # - 0: End of input has been reached.
 # - 1: A line has been successfully read.
 function read_line(   retval, source) {
-  if (queue_size == 0) {
+  if (file_count == 0) {
     retval = getline
   }
   else {
-    retval = getline < file_queue[queue_size - 1]
+    retval = getline < file_stack[file_count - 1]
   }
   if (retval == 0) {
-    if (queue_size == 0) return 0
-    dequeue_file()
+    if (file_count == 0) return 0
+    pop_file()
     return read_line()
   }
   if (retval == 1) {
     return 1
   }
   
-  source = (queue_size <= 0) ? "input" : quote(file_queue[queue_size - 1])
+  source = (file_count <= 0) ? "input" : quote(file_stack[file_count - 1])
   throw_error("couldn't read line from " source)
 }
 
