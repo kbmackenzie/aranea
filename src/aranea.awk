@@ -1,7 +1,7 @@
 #!/bin/awk -f
 
 BEGIN {
-  # When using GAWK, parse fields in a more sensible way (support quoted strings).
+  # When using GNU Awk, parse fields in a more sensible way (support quoted strings).
   # This has no effect on other flavors of Awk.
   FPAT = "([[:alnum:][:punct:]]+)|(\".*\")"
 
@@ -10,7 +10,7 @@ BEGIN {
 
   while (read_line() != 0) {
     # A little bit of a soup of 'continue', but I have no better options.
-    # I wish vanilla Awk supported higher-order functions.
+    # I wish POSIX Awk supported higher-order functions.
     keep = !should_skip()
 
     if (keep && /^#include/) {
@@ -143,8 +143,8 @@ function quote(line) {
 # Read data from file into cat as a 'here document'.
 # Assign it to a shell variable.
 function read_as_data_variable(variable, file,  line, retval, delimeter) {
-  # Get delimeter based on a filename.
-  # This allows nested heredocs! :)
+  # Get delimeter based on the filename.
+  # A little safer than using a common acronym like 'EOF'. :)
   delimeter = get_delimeter(file)
 
   print variable "=$(cat << '" delimeter "'"
