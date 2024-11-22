@@ -167,17 +167,17 @@ It's specially useful in [include guards][2]:
 
 ## A Note About Whitespace
 
-A limitation with POSIX Awk is how it splits record fields. You can define **field separators**, but they're only able to express what fields *aren't*. By default, it's whitespace.
+By default, POSIX Awk splits record fields by **whitespace**. You can define custom field separators, but they have limitations: you're only able to express what fields *aren't*.
 
-Thus: Aranea splits fields by **whitespace** when using POSIX Awk.
+Aranea splits fields by **whitespace** when using POSIX Awk. This is the default behavior.
 
-It was the cleanest option, but it has one unfortunate consequence: filepaths with **spaces** aren't valid.
+It makes directives look very clean, but has one unfortunate consequence: filepaths with **spaces** aren't valid.
 
 ```c
 #include oops not valid.txt
 ```
 
-It shouldn't be a problem for **most** projects (*who uses spaces in their script names?!*), but it can be a surprise for some people, so I wanted to document it here.
+It shouldn't be a problem for **most** projects (*who uses spaces in their script names?!*), but it can be a surprise for some people, thus it deserves to be documented.
 
 ### Solution: GNU Awk
 
