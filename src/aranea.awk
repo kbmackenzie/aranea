@@ -80,7 +80,7 @@ function pop_file() {
 
 # Write an error message to stderr and exit.
 # Simple utility.
-function throw_error(message, no_context,  context) {
+function throw_error(message, no_context,   context) {
   context = (no_context) ? "" : ("| error: " ERRNO)
   print "line " NR ":", message, context > "/dev/stderr"
   exit 1
@@ -142,7 +142,7 @@ function quote(line) {
 
 # Read data from file into cat as a 'here document'.
 # Assign it to a shell variable.
-function read_as_data_variable(variable, file,  line, retval, delimeter) {
+function read_as_data_variable(variable, file,   line, retval, delimeter) {
   # Get delimeter based on the filename.
   # A little safer than using a common acronym like 'EOF'. :)
   delimeter = get_delimeter(file)
@@ -204,7 +204,7 @@ function flip_conditional() {
 
 # Check the conditional stack at the end; see if they're all closed.
 # If they're not, handle it appropriately.
-function check_conditionals(  noun) {
+function check_conditionals(   noun) {
   if (cond_level > 0) {
     noun = (cond_level == 1) ? "directive" : "directives"
     throw_error("syntax error: " cond_level " unclosed conditional " noun "!", 1)
