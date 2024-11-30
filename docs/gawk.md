@@ -13,7 +13,7 @@ Aranea has one extra feature when used with [GNU Awk][1]. More extra features ma
 When parsing lines, Aranea splits fields by **whitespace**. This is the default behavior for POSIX Awk. As you might imagine, though, this has an unfortunate consequence: filepaths with **spaces** aren't valid.
 
 ```c
-#include oops not valid.txt
+#include oops not valid.sh
 ```
 
 It shouldn't be a problem for **most** projects (*who uses spaces in their script names?!*), but it can be a surprise for some people.
@@ -23,7 +23,7 @@ Whitespace is fortunately **not a problem with [GNU Awk][1]**, thanks to the `FP
 With GNU Awk, **Aranea supports quoted strings**:
 
 ```c
-#include "spaces are perfectly okay here.txt"
+#include "spaces are perfectly okay here.sh"
 ```
 
 ## Installing GNU Awk

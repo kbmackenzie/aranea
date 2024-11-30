@@ -174,7 +174,7 @@ Aranea splits fields by **whitespace** when using POSIX Awk. This is the default
 It makes directives look very clean, but has one unfortunate consequence: filepaths with **spaces** aren't valid.
 
 ```c
-#include oops not valid.txt
+#include oops not valid.sh
 ```
 
 It shouldn't be a problem for **most** projects (*who uses spaces in their script names?!*), but it can be a surprise for some people, thus it deserves to be documented.
@@ -186,7 +186,7 @@ Whitespace is thankfully **not a problem with [GNU Awk][1]**, thanks to the `FPA
 With GNU Awk, **Aranea supports quoted strings**:
 
 ```c
-#include "spaces are perfectly okay here.txt"
+#include "spaces are perfectly okay here.sh"
 ```
 
 Because of this, you're heavily encouraged to use GNU Awk for best results.
