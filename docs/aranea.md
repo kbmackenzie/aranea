@@ -193,7 +193,7 @@ Because of this, you're heavily encouraged to use GNU Awk for best results.
 
 A lot of Linux distributions already come with GNU Awk. In those distributions, `/usr/bin/awk` is typically a symlink to `/usr/bin/gawk`.
 
-**Unfortunately**, Debian-based distros (like Ubuntu) ship with `mawk` instead. There, you will need to install `gawk` yourself (`sudo apt-get install gawk`) and manually edit the shebang line in the `aranea` script to use `gawk`.
+**Unfortunately**, Debian-based distros (like Ubuntu) ship with `mawk` instead. There, you will need to install `gawk` yourself (`sudo apt-get install gawk`). Afterward, you can run `make install-gawk` (instead of the regular `make install`) to install Aranea with a shebang specifying `gawk` over `awk`.
 
 [See this section](gawk-extras.md#installing-gnu-awk) for guidance on checking what flavor of Awk you have.
 

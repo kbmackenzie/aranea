@@ -36,7 +36,21 @@ To know what flavor of Awk you have, run this command:
 realpath /usr/bin/awk
 ```
 
-If your distribution comes with another flavor of Awk, you'll need to manually install `gawk`. Additionally, you will need to edit the shebang line in the `aranea` script to use `gawk` instead.
+If your distribution comes with another flavor of Awk, you'll need to manually install `gawk`. On Debian-based distros, you can simply run `sudo apt-get install gawk`.
+
+Afterward, you can install Aranea with:
+
+```bash
+make install-gawk
+```
+
+This will install Aranea with a shebang specifying `gawk` instead of `awk`.
+
+The default install location is `~/.local/bin`. To install it somewhere else, you can run:
+
+```bash
+make PREFIX=/usr/local/bin install-gawk
+```
 
 **Unfortunately**, a lot of Debian-based distros (like Ubuntu) ship with `mawk` as their default Awk flavor. You can run `sudo apt-get install gawk` to install `gawk` on such distros.
 
