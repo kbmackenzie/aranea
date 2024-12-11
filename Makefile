@@ -14,4 +14,9 @@ install:
 uninstall:
 	[ -f $(PREFIX)/aranea ] && rm $(PREFIX)/aranea
 
+install-gawk:
+	chmod +x $(SCRIPT)
+	sed -e '1s/awk/gawk/' $(SCRIPT) > ./aranea
+	mv ./aranea $(PREFIX)/aranea
+
 .PHONY: lint test install uninstall
