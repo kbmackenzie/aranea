@@ -195,7 +195,7 @@ A lot of Linux distributions already come with GNU Awk. In those distributions, 
 
 **Unfortunately**, Debian-based distros (like Ubuntu) ship with `mawk` instead. There, you will need to install `gawk` yourself (`sudo apt-get install gawk`) and manually edit the shebang line in the `aranea` script to use `gawk`.
 
-[See this section](gawk.md#installing-gnu-awk) for guidance on checking what flavor of Awk you have.
+[See this section](gawk-extras.md#installing-gnu-awk) for guidance on checking what flavor of Awk you have.
 
 ## Known Caveats
 

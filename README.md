@@ -6,7 +6,9 @@ It's inspired by the C preprocessor, and its output can be used with any [POSIX-
 - **Include shell scripts** with the **`#include` directive**, making script development more modular while still generating only a single file at the end. Included files **can also contain preprocessor directives**, which are resolved **recursively**.
 - **Conditional compilation**: Define flags with `#define` and check for their existence with `#ifdef` and `#ifndef`. This can be used to create [include guards][2], for example.
 
-Aranea has extra features when used with [GNU Awk][1], as explained [here](./docs/gawk.md).
+It also has extra features when used with [GNU Awk][1], as explained [here](./docs/gawk-extras.md).
+
+Additionally, Aranea **can be used with other languages**—so long as you only use language-agnostic directives. See [this section of the documentation](./docs/usage-with-other-languages.md) to learn more!
 
 ## Table of Contents 
 
@@ -29,7 +31,7 @@ If you wish to install it somewhere else (e.g. `/usr/local/bin`), simply define 
 make PREFIX=/usr/local/bin install
 ```
 
-**Note:** Aranea has extra features when used with [GNU Awk][1], as explained [here](./docs/gawk.md).
+**Note:** Aranea has extra features when used with [GNU Awk][1], as explained [here](./docs/gawk-extras.md).
 
 ## Usage
 
