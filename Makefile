@@ -1,5 +1,6 @@
-PREFIX ?= $(HOME)/.local/bin
+NAME   := aranea
 SCRIPT := src/aranea.awk
+PREFIX ?= $(HOME)/.local/bin
 
 lint:
 	awk --lint -f $(SCRIPT) <<< ""
@@ -9,14 +10,14 @@ test:
 
 install:
 	chmod +x $(SCRIPT)
-	cp $(SCRIPT) $(PREFIX)/aranea
+	cp $(SCRIPT) $(PREFIX)/$(NAME)
 
 uninstall:
-	[ -f $(PREFIX)/aranea ] && rm $(PREFIX)/aranea
+	[ -f $(PREFIX)/$(NAME) ] && rm $(PREFIX)/$(NAME)
 
 install-gawk:
 	chmod +x $(SCRIPT)
-	sed -e '1s/awk/gawk/' $(SCRIPT) > ./aranea
-	mv ./aranea $(PREFIX)/aranea
+	sed -e '1s/awk/gawk/' $(SCRIPT) > ./$(NAME)
+	mv ./$(NAME) $(PREFIX)/$(NAME)
 
 .PHONY: lint test install uninstall
