@@ -1,8 +1,8 @@
-<img align="left" width="256" height="256" src="logo.svg" alt="Aranea logo">
-
 Aranea is a **tiny, minimalist** shell preprocessor written in POSIX-compliant **Awk**. It's a small, portable, self-contained script.
 
 It's inspired by the C preprocessor, and its output can be used with any [POSIX-compliant shell][3]. It should work out-of-the-box in most Linux distributions. It can...
+
+<img align="left" width="192" height="192" src="logo.svg" alt="Aranea logo">
 
 - **Embed data files** into shell scripts with the **`#data` directive**, helping make shell scripts more self-contained.
 - **Include shell scripts** with the **`#include` directive**, making script development more modular while still generating only a single file at the end. Included files **can also contain preprocessor directives**, which are resolved **recursively**.
