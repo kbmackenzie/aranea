@@ -1,4 +1,6 @@
-Aranea is a **tiny, minimalist** shell preprocessor written in POSIX-compliant **Awk**. It's a small, portable, self-contained script!
+<img align="left" width="256" height="256" src="logo.svg" alt="Aranea logo">
+
+Aranea is a **tiny, minimalist** shell preprocessor written in POSIX-compliant **Awk**. It's a small, portable, self-contained script.
 
 It's inspired by the C preprocessor, and its output can be used with any [POSIX-compliant shell][3]. It should work out-of-the-box in most Linux distributions. It can...
 
@@ -8,7 +10,7 @@ It's inspired by the C preprocessor, and its output can be used with any [POSIX-
 
 It also has extra features when used with [GNU Awk][1], as explained [here](./docs/gawk-extras.md).
 
-Additionally, Aranea **can be used with other languages**—so long as you only use language-agnostic directives. See [this section of the documentation](./docs/usage-with-other-languages.md) to learn more!
+Additionally, Aranea **can be used with other languages**—so long as you only use language-agnostic directives. See [this section of the documentation](./docs/usage-with-other-languages.md) to learn more.
 
 ## Table of Contents 
 
