@@ -130,7 +130,7 @@ function escape_line(line) {
 # This is done so that nested here documents are simpler to implement.
 function get_delimeter(filepath) {
   gsub(/[^a-zA-Z_]/, "_", filepath)
-  return filepath
+  return "____" filepath
 }
 
 # Quote (+ escape) a string for displaying. Surrounds it with double quotes.
