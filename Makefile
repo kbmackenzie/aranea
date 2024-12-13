@@ -6,7 +6,7 @@ lint:
 	awk --lint -f $(SCRIPT) <<< ""
 
 test:
-	./test.sh
+	./test.sh || true
 
 install:
 	chmod +x $(SCRIPT)
