@@ -20,4 +20,4 @@ install-gawk:
 	sed -e '1s/awk/gawk/' $(SCRIPT) > ./$(NAME)
 	mv ./$(NAME) $(PREFIX)/$(NAME)
 
-.PHONY: lint test install uninstall
+.PHONY: lint test install uninstall install-gawk
